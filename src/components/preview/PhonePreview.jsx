@@ -375,15 +375,24 @@ export function CardContent({ profile: propProfile, scale = 1 }) {
   )
 }
 
-export default function PhonePreview() {
+export default function PhonePreview({ profile: propProfile }) {
+  let contextProfile = null
+  try {
+    const ctx = useProfile()
+    contextProfile = ctx?.profile
+  } catch (e) {}
+
+  const profile = propProfile || contextProfile || {}
+  const template = profile?.template || "cyan-ocean"
+
   return (
     <div className="phone-mockup-wrapper">
       <div className="phone-device-frame">
         <div className="phone-speaker-notch" />
         <div className="phone-scroll-screen">
-          <CardContent />
+          <CardContent profile={profile} />
         </div>
-        <BottomNav />
+        <BottomNav profile={profile} />
         <div className="phone-home-indicator" />
       </div>
     </div>

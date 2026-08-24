@@ -494,59 +494,6 @@ export default function BusinessForm() {
           />
         </div>
       </div>
-
-      {/* Additional Profile Metadata Details Toggle */}
-      <div className="advanced-fields-box">
-        <button
-          type="button"
-          className="btn-toggle-advanced"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-        >
-          <span>{showAdvanced ? "▼" : "▶"} Additional Profile Attributes (Member No, Blood Group, Verified)</span>
-        </button>
-
-        {showAdvanced && (
-          <div className="advanced-fields-grid">
-            <div className="form-row-3">
-              <div className="form-field">
-                <label className="form-label">Member No (member_num)</label>
-                <input
-                  className="form-input"
-                  placeholder="e.g. MEM-1048"
-                  value={b.memberNum || ""}
-                  onChange={(e) => updateBusiness("memberNum", e.target.value)}
-                />
-              </div>
-
-              <div className="form-field">
-                <label className="form-label">Blood Group (blood_group)</label>
-                <select
-                  className="form-select"
-                  value={b.bloodGroup || ""}
-                  onChange={(e) => updateBusiness("bloodGroup", e.target.value)}
-                >
-                  <option value="">Select Blood Group</option>
-                  {BLOOD_GROUPS.map((bg) => (
-                    <option key={bg} value={bg}>{bg}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-field">
-                <label className="form-label">Verified Member (verified)</label>
-                <label className="checkbox-label-card">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(b.verified)}
-                    onChange={(e) => updateBusiness("verified", e.target.checked)}
-                  />
-                  <span>Verified Badge Active</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

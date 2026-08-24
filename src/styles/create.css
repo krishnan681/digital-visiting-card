@@ -1665,7 +1665,6 @@
    Right Live Preview Panel
    -------------------------------------------------------------------------- */
 .preview-panel {
-  background: #f1f5f9;
   padding: 1.75rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -1674,6 +1673,7 @@
   top: 65px;
   height: calc(100vh - 65px);
   overflow-y: auto;
+  transition: background 0.3s ease;
 }
 
 .preview-header {

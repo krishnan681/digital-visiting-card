@@ -24,7 +24,7 @@ const FORM_COMPONENTS = [
 ]
 
 export default function CreatePage() {
-  const { profile } = useProfile()
+  const { profile, resetProfile } = useProfile()
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(0)
   const [completed, setCompleted] = useState(new Set())
@@ -84,6 +84,14 @@ export default function CreatePage() {
     }
   }
 
+  const handleResetAndNew = () => {
+    resetProfile()
+    setPublishedSlug(null)
+    setCurrentStep(0)
+    setCompleted(new Set())
+    setCustomSlugInput("")
+  }
+
   const publicUrl = publishedSlug ? `${window.location.origin}/${publishedSlug}` : ""
 
   const handleCopyLink = () => {
@@ -92,6 +100,8 @@ export default function CreatePage() {
     setCopied(true)
     setTimeout(() => setCopied(false), 2500)
   }
+
+  const template = profile?.template || "cyan-ocean"
 
   return (
     <div className="create-page">
@@ -128,7 +138,7 @@ export default function CreatePage() {
       <div className="create-body">
         {/* Left Interactive Form Panel */}
         <div className="form-panel">
-          {/* 4 Connected Navigation Steps */}
+          {/* 3 Connected Navigation Steps */}
           <div className="step-progress-container">
             <nav className="step-progress-bar" ref={stepsNavRef} role="tablist" aria-label="Creation Steps">
               {STEPS.map((step, idx) => {
@@ -220,7 +230,7 @@ export default function CreatePage() {
           </footer>
         </div>
 
-        {/* Right Live Preview Panel */}
+        {/* Right Live Preview Panel (Clean neutral backdrop) */}
         <div className={`preview-panel preview-${device}`}>
           <div className="preview-header">
             <div className="preview-label-group">
@@ -238,14 +248,14 @@ export default function CreatePage() {
 
       {/* Publish Success Modal */}
       {publishedSlug && (
-        <div className="publish-modal-backdrop" onClick={() => setPublishedSlug(null)}>
+        <div className="publish-modal-backdrop" onClick={handleResetAndNew}>
           <div className="publish-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="publish-modal-header">
               <div className="publish-success-badge">🎉 Card Published & Live!</div>
               <button
                 type="button"
                 className="publish-modal-close"
-                onClick={() => setPublishedSlug(null)}
+                onClick={handleResetAndNew}
                 aria-label="Close"
               >
                 ✕
@@ -280,15 +290,17 @@ export default function CreatePage() {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => setPublishedSlug(null)}
+                onClick={handleResetAndNew}
+                title="Clear all fields and create a new digital card"
               >
-                Continue Editing
+                🔄 Create New Card (Reset)
               </button>
               <a
                 href={`/${publishedSlug}`}
                 target="_blank"
                 rel="noreferrer"
                 className="btn btn-primary publish-visit-btn"
+                onClick={handleResetAndNew}
               >
                 Open Live Card ↗
               </a>

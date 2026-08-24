@@ -19,16 +19,23 @@ const DEVICES = [
   },
   {
     id: "fullpage",
-    label: "Full Page",
+    label: "Full Page ↗",
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
       </svg>
     ),
   },
 ]
 
 export default function PreviewSwitcher({ device, onChange }) {
+  const handleClick = (id) => {
+    if (id === "fullpage") {
+      window.open("/preview", "_blank")
+    }
+    onChange(id)
+  }
+
   return (
     <div className="preview-switcher" role="tablist" aria-label="Preview device">
       {DEVICES.map((d) => (
@@ -37,8 +44,8 @@ export default function PreviewSwitcher({ device, onChange }) {
           role="tab"
           aria-selected={device === d.id}
           className={`device-btn ${device === d.id ? "active" : ""}`}
-          onClick={() => onChange(d.id)}
-          title={d.label}
+          onClick={() => handleClick(d.id)}
+          title={d.id === "fullpage" ? "Open Full Live Preview in New Window" : d.label}
         >
           <span className="device-icon">{d.icon}</span>
           <span className="device-label">{d.label}</span>

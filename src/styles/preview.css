@@ -781,6 +781,16 @@
   padding: 1.5rem 1rem 5.5rem;
   position: relative;
   transition: background 0.3s ease;
+  background-attachment: fixed !important;
+}
+
+.public-profile-wrapper.bg-tpl-cyan-ocean,
+.public-profile-wrapper.bg-tpl-gold-luxury,
+.public-profile-wrapper.bg-tpl-emerald-mesh,
+.public-profile-wrapper.bg-tpl-pink-angled,
+.public-profile-wrapper.bg-tpl-purple-indigo,
+.public-profile-wrapper.bg-tpl-sunset-amber {
+  background-attachment: fixed !important;
 }
 
 /* Base public card container with floating glass depth */

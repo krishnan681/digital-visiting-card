@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react"
 
-const defaultProfile = {
+export const defaultProfile = {
   userType: "business",
   business: {
     logo: "",
@@ -15,11 +15,6 @@ const defaultProfile = {
     description: "",
     memberNum: "",
     bloodGroup: "",
-    verified: false,
-    isPrime: false,
-    isAdmin: false,
-    promoCode: "",
-    activity: "",
   },
   contact: {
     mobile: "",
@@ -40,33 +35,8 @@ const defaultProfile = {
     pincode: "",
     googleMapsUrl: "",
   },
-  social: {
-    facebook: "",
-    instagram: "",
-    linkedin: "",
-    youtube: "",
-    x: "",
-    telegram: "",
-  },
   products: [],
-  gallery: [],
-  videos: [],
-  payments: {
-    upi: "",
-    bankName: "",
-    accountNumber: "",
-    ifsc: "",
-    accountHolder: "",
-    qrImage: "",
-  },
-  branding: {
-    primaryColor: "#2563eb",
-    secondaryColor: "#1e40af",
-    background: "#ffffff",
-    font: "Inter",
-    borderRadius: "12",
-  },
-  template: "pink-angled",
+  template: "cyan-ocean",
 }
 
 const ProfileContext = createContext(null)
@@ -82,12 +52,12 @@ export function ProfileProvider({ children }) {
     }
   })
 
-  // Safe persist effect to prevent QuotaExceededError crashes
+  // Safe persist effect
   useEffect(() => {
     try {
       localStorage.setItem("dvc_profile", JSON.stringify(profile))
     } catch (e) {
-      console.warn("localStorage quota reached or unavailable. Continuing in-memory without crashing:", e.message)
+      console.warn("localStorage quota reached or unavailable:", e.message)
     }
   }, [profile])
 
@@ -109,57 +79,31 @@ export function ProfileProvider({ children }) {
     setProfile((prev) => ({ ...prev, products }))
   }
 
-  function setGallery(gallery) {
-    setProfile((prev) => ({ ...prev, gallery }))
-  }
-
-  function setVideos(videos) {
-    setProfile((prev) => ({ ...prev, videos }))
-  }
-
   function setTemplate(template) {
     setProfile((prev) => ({ ...prev, template }))
   }
 
   function loadProfile(newProfile) {
     if (!newProfile) return
-    setProfile((prev) => ({
+    setProfile({
       ...defaultProfile,
       ...newProfile,
       userType: newProfile.userType || defaultProfile.userType,
       business: { ...defaultProfile.business, ...(newProfile.business || {}) },
       contact: { ...defaultProfile.contact, ...(newProfile.contact || {}) },
       address: { ...defaultProfile.address, ...(newProfile.address || {}) },
-      products: newProfile.products || prev.products || [],
-    }))
+      products: newProfile.products && newProfile.products.length > 0 ? newProfile.products : (defaultProfile.products || []),
+      template: newProfile.template || defaultProfile.template,
+    })
   }
 
-  function addReferral(friend) {
-    setProfile((prev) => {
-      const currentPromo = prev.promoEvScooter || defaultProfile.promoEvScooter
-      const updatedList = [
-        {
-          id: Date.now().toString(),
-          name: friend.name,
-          mobile: friend.mobile,
-          date: new Date().toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }),
-          status: "Verified",
-        },
-        ...(currentPromo.referralsList || []),
-      ]
-      const newReferralsCount = (currentPromo.referralsCount || 0) + 1
-      const newCouponsEarned = Math.floor(newReferralsCount / 3)
-
-      return {
-        ...prev,
-        promoEvScooter: {
-          ...currentPromo,
-          referralsCount: newReferralsCount,
-          couponsEarned: newCouponsEarned,
-          referralsList: updatedList,
-        },
-      }
-    })
+  function resetProfile() {
+    setProfile(defaultProfile)
+    try {
+      localStorage.removeItem("dvc_profile")
+    } catch (e) {
+      console.warn("Failed to clear localStorage:", e)
+    }
   }
 
   return (
@@ -169,11 +113,9 @@ export function ProfileProvider({ children }) {
         updateSection,
         updateField,
         setProducts,
-        setGallery,
-        setVideos,
         setTemplate,
         loadProfile,
-        addReferral,
+        resetProfile,
       }}
     >
       {children}
@@ -186,4 +128,3 @@ export function useProfile() {
   if (!ctx) throw new Error("useProfile must be used within ProfileProvider")
   return ctx
 }
-

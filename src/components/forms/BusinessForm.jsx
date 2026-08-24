@@ -122,10 +122,10 @@ export default function BusinessForm() {
           <div className="profile-search-modal" onClick={(e) => e.stopPropagation()}>
             <div className="profile-search-header">
               <div className="profile-search-title-wrap">
-                <span className="profile-search-icon">🔍</span>
+                <span className="profile-search-icon">📱</span>
                 <div>
-                  <h3 className="profile-search-title">Fetch from Supabase Profiles</h3>
-                  <p className="profile-search-sub">Search public.profiles table by mobile, business name, person name, or city</p>
+                  <h3 className="profile-search-title">Fetch Profile by Mobile Number</h3>
+                  <p className="profile-search-sub">Search public.profiles table using mobile number to autofill details</p>
                 </div>
               </div>
               <button
@@ -139,12 +139,12 @@ export default function BusinessForm() {
             </div>
 
             <div className="profile-search-input-box">
-              <span className="search-input-icon">🔍</span>
+              <span className="search-input-icon">📞</span>
               <input
-                type="text"
+                type="tel"
                 autoFocus
                 className="profile-search-input"
-                placeholder="Search by Mobile (e.g. 96887...), Business Name, or Person Name..."
+                placeholder="Enter Mobile Number (e.g. 9688755530)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -163,13 +163,13 @@ export default function BusinessForm() {
               {isSearching ? (
                 <div className="profile-search-loading">
                   <div className="search-spinner" />
-                  <span>Searching Supabase database...</span>
+                  <span>Searching mobile numbers in Supabase database...</span>
                 </div>
               ) : searchResults.length === 0 ? (
                 <div className="profile-search-empty">
-                  <div className="empty-icon">📂</div>
-                  <p className="empty-title">No matching profiles found</p>
-                  <p className="empty-sub">Try searching with a different mobile number or business name</p>
+                  <div className="empty-icon">📱</div>
+                  <p className="empty-title">No profile found for this mobile number</p>
+                  <p className="empty-sub">Check the mobile number or enter your details manually in the form</p>
                 </div>
               ) : (
                 <div className="profile-results-list">

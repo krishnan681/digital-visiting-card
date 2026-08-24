@@ -239,9 +239,9 @@ export default function CreatePage() {
             <PreviewSwitcher device={device} onChange={setDevice} />
           </div>
           <div className="preview-stage">
-            {device === "mobile" && <PhonePreview />}
-            {device === "desktop" && <DesktopPreview />}
-            {device === "fullpage" && <FullPagePreview />}
+            {device === "mobile" && <PhonePreview profile={profile} />}
+            {device === "desktop" && <DesktopPreview profile={profile} />}
+            {device === "fullpage" && <FullPagePreview profile={profile} />}
           </div>
         </div>
       </div>

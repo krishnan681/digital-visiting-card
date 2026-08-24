@@ -4,6 +4,21 @@
 import { supabaseRest, isSupabaseConfigured } from "../lib/supabase"
 
 const LOCAL_STORAGE_KEY = "dvc_saved_profiles"
+const TEMPLATES = ["cyan-ocean", "gold-luxury", "emerald-mesh", "pink-angled", "purple-indigo", "sunset-amber"]
+
+/**
+ * Deterministically assigns a unique template based on profile seed
+ */
+function getDeterministicTemplate(seed, fallback = "cyan-ocean") {
+  if (!seed) return fallback
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i)
+    hash |= 0
+  }
+  const idx = Math.abs(hash) % TEMPLATES.length
+  return TEMPLATES[idx]
+}
 
 /**
  * Normalizes business name into a URL-friendly slug
@@ -31,7 +46,7 @@ export function mapDbRowToProfile(row) {
       if (typeof row.product_images === "string" && row.product_images.startsWith("[")) {
         productsList = JSON.parse(row.product_images).map((img, i) => ({
           name: `Product ${i + 1}`,
-          image: typeof img === "string" ? img : img.url,
+          image: typeof img === "string" ? img : (img.url || img.image),
           description: img.description || "",
           price: img.price || "",
         }))
@@ -50,11 +65,17 @@ export function mapDbRowToProfile(row) {
 
   // Generate fallback slug
   const slug = generateSlug(row.business_name || row.person_name || row.mobile_number || row.id)
+  
+  // Resolve template: use stored template or compute unique deterministic pattern
+  const rowTemplate = row.promo_code && TEMPLATES.includes(row.promo_code)
+    ? row.promo_code
+    : (row.dvc_template || getDeterministicTemplate(row.id || row.mobile_number || row.business_name || slug))
 
   return {
     id: row.id,
     slug: row.dvc_slug || slug,
     userType: row.user_type || "business",
+    template: rowTemplate,
     business: {
       businessName: row.business_name || row.dvc_business_name || "",
       businessPrefix: row.business_prefix || "M/s.",
@@ -66,13 +87,6 @@ export function mapDbRowToProfile(row) {
       description: row.description || row.dvc_description || "",
       logo: row.profile_image || row.dvc_logo || "",
       banner: row.cover_image || row.dvc_banner || "",
-      memberNum: row.member_num || "",
-      bloodGroup: row.blood_group || "",
-      verified: Boolean(row.verified),
-      isPrime: Boolean(row.is_prime),
-      isAdmin: Boolean(row.is_admin),
-      promoCode: row.promo_code || "",
-      activity: row.activity || "",
     },
     contact: {
       mobile: row.mobile_number || row.dvc_contact?.mobile || "",
@@ -108,6 +122,14 @@ export function mapProfileToDbRow(profileData) {
   const c = profileData?.contact || {}
   const a = profileData?.address || {}
 
+  // Serialize product images if available
+  let serializedProducts = null
+  if (profileData?.products && profileData.products.length > 0) {
+    try {
+      serializedProducts = JSON.stringify(profileData.products)
+    } catch (e) {}
+  }
+
   return {
     user_type: profileData?.userType || (b.businessName ? "business" : "person"),
     mobile_number: c.mobile || null,
@@ -123,18 +145,15 @@ export function mapProfileToDbRow(profileData) {
     landline: c.landline || null,
     landline_code: c.landlineCode || null,
     landline_number: c.landlineNumber || null,
-    promo_code: b.promoCode || null,
+    promo_code: profileData?.template || null, // Store template in promo_code
     profile_image: b.logo || null,
     cover_image: b.banner || null,
-    activity: b.activity || b.category || null,
+    activity: b.category || null,
     whats_app: c.whatsapp || null,
     web_site: c.website || null,
     address: a.personalAddress || a.address || null,
     bussiness_address: a.businessAddress || a.address || null,
-    member_num: b.memberNum || null,
-    blood_group: b.bloodGroup || null,
-    verified: Boolean(b.verified),
-    is_prime: Boolean(b.isPrime),
+    product_images: serializedProducts,
   }
 }
 
@@ -170,22 +189,20 @@ function saveLocalProfile(slug, profileData) {
 }
 
 /**
- * Searches profiles from Supabase public.profiles by mobile, business name, person name, or city
- * @param {string} query 
+ * Searches profiles from Supabase public.profiles ONLY using Mobile Number
+ * @param {string} mobileQuery 
  * @returns {Promise<Array<object>>}
  */
-export async function searchProfiles(query = "") {
-  const cleanQ = query.trim()
+export async function searchProfiles(mobileQuery = "") {
+  const cleanDigits = mobileQuery.replace(/[^\d+]/g, "").trim()
   let results = []
 
-  // 1. Query Supabase public.profiles table
+  // 1. Query Supabase public.profiles table by mobile_number
   if (isSupabaseConfigured) {
     try {
-      let endpoint = "profiles?select=*&order=created_at.desc&limit=35"
-      if (cleanQ) {
-        // Search across mobile_number, business_name, person_name, display_name, email, city, keywords
-        const filter = `or=(mobile_number.ilike.*${encodeURIComponent(cleanQ)}*,business_name.ilike.*${encodeURIComponent(cleanQ)}*,person_name.ilike.*${encodeURIComponent(cleanQ)}*,display_name.ilike.*${encodeURIComponent(cleanQ)}*,email.ilike.*${encodeURIComponent(cleanQ)}*,city.ilike.*${encodeURIComponent(cleanQ)}*,keywords.ilike.*${encodeURIComponent(cleanQ)}*)`
-        endpoint = `profiles?${filter}&select=*&limit=35`
+      let endpoint = "profiles?select=*&order=created_at.desc&limit=30"
+      if (cleanDigits) {
+        endpoint = `profiles?mobile_number=ilike.*${encodeURIComponent(cleanDigits)}*&select=*&limit=30`
       }
       const { data, error } = await supabaseRest(endpoint)
       if (!error && Array.isArray(data) && data.length > 0) {
@@ -198,17 +215,13 @@ export async function searchProfiles(query = "") {
     }
   }
 
-  // 2. Fallback: Search local saved profiles
+  // 2. Fallback: Search local saved profiles by mobile
   const localMap = getLocalProfiles()
   const localList = Object.values(localMap)
 
   for (const item of localList) {
-    const qLower = cleanQ.toLowerCase()
-    const isMatch = !cleanQ || 
-      item?.business?.businessName?.toLowerCase().includes(qLower) ||
-      item?.business?.personName?.toLowerCase().includes(qLower) ||
-      item?.contact?.mobile?.toLowerCase().includes(qLower) ||
-      item?.slug?.toLowerCase().includes(qLower)
+    const phone = (item?.contact?.mobile || "").replace(/[^\d+]/g, "")
+    const isMatch = !cleanDigits || phone.includes(cleanDigits)
 
     if (isMatch && !results.some(r => r.slug === item.slug || (r.contact?.mobile && r.contact.mobile === item.contact?.mobile))) {
       results.push(item)
@@ -225,27 +238,29 @@ export async function getProfileBySlug(slug) {
   if (!slug) return null
   const cleanSlug = slug.trim()
   const wildcardSlug = cleanSlug.replace(/[-_]+/g, "%")
+  const textSlug = cleanSlug.replace(/[-_]+/g, " ")
 
   if (isSupabaseConfigured) {
     try {
-      // 1. First attempt: Direct mobile, exact business_name, or exact person_name
+      // 1. Check exact mobile_number, exact business_name, or exact person_name
       const filter1 = `or=(mobile_number.eq.${encodeURIComponent(cleanSlug)},business_name.ilike.${encodeURIComponent(cleanSlug)},person_name.ilike.${encodeURIComponent(cleanSlug)},display_name.ilike.${encodeURIComponent(cleanSlug)})`
       const { data: d1, error: e1 } = await supabaseRest(`profiles?${filter1}&select=*&limit=1`)
       if (!e1 && d1 && d1.length > 0) {
         return mapDbRowToProfile(d1[0])
       }
 
-      // 2. Second attempt: Wildcard slug match (e.g. "ashok-r" -> "ashok%r")
+      // 2. Wildcard slug match (e.g. "dharan-womens-care" -> "dharan%womens%care")
       const filter2 = `or=(business_name.ilike.*${encodeURIComponent(wildcardSlug)}*,person_name.ilike.*${encodeURIComponent(wildcardSlug)}*,display_name.ilike.*${encodeURIComponent(wildcardSlug)}*)`
       const { data: d2, error: e2 } = await supabaseRest(`profiles?${filter2}&select=*&limit=1`)
       if (!e2 && d2 && d2.length > 0) {
         return mapDbRowToProfile(d2[0])
       }
 
-      // 3. Third attempt: Broad search across recent profiles
-      const searchResults = await searchProfiles(cleanSlug.replace(/[-_]+/g, " "))
-      if (searchResults && searchResults.length > 0) {
-        return searchResults[0]
+      // 3. Fallback search by words
+      const filter3 = `or=(business_name.ilike.*${encodeURIComponent(textSlug)}*,person_name.ilike.*${encodeURIComponent(textSlug)}*)`
+      const { data: d3, error: e3 } = await supabaseRest(`profiles?${filter3}&select=*&limit=1`)
+      if (!e3 && d3 && d3.length > 0) {
+        return mapDbRowToProfile(d3[0])
       }
     } catch (err) {
       console.warn("Supabase fetch error:", err)
@@ -259,9 +274,9 @@ export async function getProfileBySlug(slug) {
     return localProfiles[lowerSlug]
   }
 
-  // Match by partial key in local storage
+  // Match by partial key or slug in local storage
   for (const [k, p] of Object.entries(localProfiles)) {
-    if (k.toLowerCase() === lowerSlug || p?.slug?.toLowerCase() === lowerSlug) {
+    if (k.toLowerCase() === lowerSlug || p?.slug?.toLowerCase() === lowerSlug || p?.contact?.mobile === cleanSlug) {
       return p
     }
   }
@@ -270,7 +285,7 @@ export async function getProfileBySlug(slug) {
 }
 
 /**
- * Saves or updates a profile
+ * Saves or updates a profile in Supabase profiles table and local cache
  */
 export async function saveProfile(slug, profileData) {
   const cleanSlug = generateSlug(slug || profileData?.business?.businessName || profileData?.contact?.mobile || "")
@@ -280,6 +295,22 @@ export async function saveProfile(slug, profileData) {
   if (isSupabaseConfigured) {
     try {
       const dbPayload = mapProfileToDbRow(profileData)
+      const mobile = profileData?.contact?.mobile
+
+      // If mobile number exists, check if row exists to update, otherwise insert
+      if (mobile) {
+        const { data: existing } = await supabaseRest(`profiles?mobile_number=eq.${encodeURIComponent(mobile)}&select=id&limit=1`)
+        if (existing && existing.length > 0) {
+          // Update existing row
+          await supabaseRest(`profiles?mobile_number=eq.${encodeURIComponent(mobile)}`, {
+            method: "PATCH",
+            body: JSON.stringify(dbPayload),
+          })
+          return { success: true, slug: cleanSlug }
+        }
+      }
+
+      // Insert new profile
       const { error } = await supabaseRest("profiles", {
         method: "POST",
         headers: {
@@ -289,7 +320,7 @@ export async function saveProfile(slug, profileData) {
       })
 
       if (error) {
-        console.warn("Supabase profiles upsert info:", error.message)
+        console.warn("Supabase profiles save info:", error.message)
       }
     } catch (err) {
       console.warn("Supabase save network error:", err)

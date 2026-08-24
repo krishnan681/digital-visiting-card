@@ -4,7 +4,6 @@ import { useProfile } from "../context/ProfileContext"
 import { saveProfile, generateSlug } from "../services/profileService"
 import PhonePreview from "../components/preview/PhonePreview"
 import DesktopPreview from "../components/preview/DesktopPreview"
-import FullPagePreview from "../components/preview/FullPagePreview"
 import PreviewSwitcher from "../components/preview/PreviewSwitcher"
 import BusinessForm from "../components/forms/BusinessForm"
 import ProductsForm from "../components/forms/ProductsForm"
@@ -140,27 +139,16 @@ export default function CreatePage() {
         <div className="form-panel">
           {/* 3 Connected Navigation Steps */}
           <div className="step-progress-container">
-            <nav className="step-progress-bar" ref={stepsNavRef} role="tablist" aria-label="Creation Steps">
+            <div className="step-progress-bar" ref={stepsNavRef} aria-label="Creation Steps">
               {STEPS.map((step, idx) => {
                 const isCompleted = completed.has(step.id) || currentStep > idx
                 const isCurrent = currentStep === step.id
                 const isUpcoming = !isCompleted && !isCurrent
 
                 return (
-                  <div
-                    key={step.id}
-                    className={`step-node-wrapper ${isCurrent ? "active" : ""} ${isCompleted ? "completed" : ""} ${isUpcoming ? "upcoming" : ""}`}
-                  >
-                    {idx > 0 && (
-                      <div className={`step-connector-line ${isCompleted || isCurrent ? "filled" : ""}`} />
-                    )}
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={isCurrent}
-                      className="step-node-btn"
-                      onClick={() => goTo(step.id)}
-                      title={`Step ${idx + 1}: ${step.label}`}
+                  <div key={step.id} className="step-item-group">
+                    <div
+                      className={`step-node-card ${isCurrent ? "active" : ""} ${isCompleted ? "completed" : ""} ${isUpcoming ? "upcoming" : ""}`}
                     >
                       <div className="step-node-circle">
                         {isCompleted ? (
@@ -173,11 +161,14 @@ export default function CreatePage() {
                         <span className="step-node-label">{step.label}</span>
                         <span className="step-node-desc">{step.desc}</span>
                       </div>
-                    </button>
+                    </div>
+                    {idx < STEPS.length - 1 && (
+                      <div className={`step-connector-line ${isCompleted ? "filled" : ""}`} />
+                    )}
                   </div>
                 )
               })}
-            </nav>
+            </div>
           </div>
 
           {/* Form Screen Content */}
@@ -230,7 +221,7 @@ export default function CreatePage() {
           </footer>
         </div>
 
-        {/* Right Live Preview Panel (Clean neutral backdrop) */}
+        {/* Right Live Preview Panel */}
         <div className={`preview-panel preview-${device}`}>
           <div className="preview-header">
             <div className="preview-label-group">
@@ -239,9 +230,11 @@ export default function CreatePage() {
             <PreviewSwitcher device={device} onChange={setDevice} />
           </div>
           <div className="preview-stage">
-            {device === "mobile" && <PhonePreview profile={profile} />}
-            {device === "desktop" && <DesktopPreview profile={profile} />}
-            {device === "fullpage" && <FullPagePreview profile={profile} />}
+            {device === "mobile" ? (
+              <PhonePreview profile={profile} />
+            ) : (
+              <DesktopPreview profile={profile} />
+            )}
           </div>
         </div>
       </div>

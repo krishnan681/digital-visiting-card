@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 import { useProfile } from "../../context/ProfileContext"
 import "../../styles/preview.css"
 
@@ -131,31 +132,34 @@ export function CardContent({ profile: propProfile, scale = 1 }) {
 
   const template = profile.template || "cyan-ocean"
 
+  const isPerson = profile.userType === "person"
+  const mainTitle = isPerson
+    ? `${business.personPrefix ? `${business.personPrefix} ` : ""}${business.personName || "Your Full Name"}`
+    : `${business.businessPrefix && business.businessPrefix !== "None" ? `${business.businessPrefix} ` : ""}${business.businessName || "Your Business Name"}`
+
   return (
     <div className={`card-screen light-theme-card tpl-${template}`} data-scale={scale}>
       {/* 1. Header Banner & Business Identity */}
       <div className="card-hero-container" id="card-home">
-        <div
-          className="card-hero-banner"
-          style={
-            business.banner
-              ? {
-                  backgroundImage: `linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 100%), url("${business.banner}")`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }
-              : undefined
-          }
-        >
-          <div className="card-live-indicator">
-            <span className="live-dot" /> Live Card
-          </div>
+        <div className="card-hero-banner">
+          {business.banner && (
+            <img
+              src={business.banner}
+              alt="Cover Banner"
+              className="card-hero-banner-img"
+              onError={(e) => { e.target.style.display = 'none' }}
+            />
+          )}
         </div>
 
         <div className="card-header-profile">
           <div className="card-logo-avatar">
             {business.logo ? (
-              <img src={business.logo} alt={business.businessName || "logo"} />
+              <img
+                src={business.logo}
+                alt={business.businessName || business.personName || "logo"}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
             ) : (
               <span className="logo-initials-text">{initials}</span>
             )}
@@ -163,18 +167,34 @@ export function CardContent({ profile: propProfile, scale = 1 }) {
 
           <div className="card-profile-text">
             <h2 className="card-biz-title">
-              {business.businessPrefix && business.businessPrefix !== "None" ? `${business.businessPrefix} ` : ""}
-              {business.businessName || "Your Business Name"}
+              {mainTitle}
               {business.verified && <span className="profile-verified-badge" style={{ marginLeft: 6 }}>✓</span>}
             </h2>
-            {business.personName && (
-              <p className="card-owner-name">
-                👤 {business.personPrefix ? `${business.personPrefix} ` : ""}{business.personName}
-              </p>
+
+            {isPerson ? (
+              <>
+                {business.designation && (
+                  <p className="card-designation">{business.designation}</p>
+                )}
+                {business.businessName && (
+                  <p className="card-owner-name">
+                    🏢 {business.businessPrefix && business.businessPrefix !== "None" ? `${business.businessPrefix} ` : ""}{business.businessName}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                {business.personName && (
+                  <p className="card-owner-name">
+                    👤 {business.personPrefix ? `${business.personPrefix} ` : ""}{business.personName}
+                  </p>
+                )}
+                {business.designation && (
+                  <p className="card-designation">{business.designation}</p>
+                )}
+              </>
             )}
-            {business.designation && (
-              <p className="card-designation">{business.designation}</p>
-            )}
+
             {(business.category || business.activity) && (
               <div style={{ marginTop: 4 }}>
                 <span className="profile-cat-pill">{business.category || business.activity}</span>
@@ -367,8 +387,11 @@ export function CardContent({ profile: propProfile, scale = 1 }) {
         </a>
       </section>
 
-      {/* Card Footer */}
+      {/* Card Footer with Inside Create Link */}
       <footer className="card-preview-footer">
+        <Link to="/create" className="card-create-celfon-btn">
+          <span>⚡ Create your own Digital Card on CELFON</span>
+        </Link>
         <p className="card-footer-branding">Digital Visiting Card • Powered by CELFON</p>
       </footer>
     </div>

@@ -69,10 +69,22 @@ export function ProfileProvider({ children }) {
   }
 
   function updateField(section, field, value) {
+    if (value === undefined && typeof field !== "object") {
+      // Root property update e.g. updateField("userType", "person")
+      setProfile((prev) => ({
+        ...prev,
+        [section]: field,
+      }))
+      return
+    }
     setProfile((prev) => ({
       ...prev,
       [section]: { ...prev[section], [field]: value },
     }))
+  }
+
+  function setUserType(userType) {
+    setProfile((prev) => ({ ...prev, userType }))
   }
 
   function setProducts(products) {
@@ -112,6 +124,7 @@ export function ProfileProvider({ children }) {
         profile,
         updateSection,
         updateField,
+        setUserType,
         setProducts,
         setTemplate,
         loadProfile,

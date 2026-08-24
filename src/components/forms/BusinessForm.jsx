@@ -232,17 +232,22 @@ export default function BusinessForm() {
           <button
             type="button"
             className={`type-toggle-btn ${profile.userType === "business" ? "active" : ""}`}
-            onClick={() => updateRoot("userType", "business")}
+            onClick={() => setUserType ? setUserType("business") : updateField("userType", "business")}
           >
             🏢 Business Profile
           </button>
           <button
             type="button"
             className={`type-toggle-btn ${profile.userType === "person" ? "active" : ""}`}
-            onClick={() => updateRoot("userType", "person")}
+            onClick={() => setUserType ? setUserType("person") : updateField("userType", "person")}
           >
             👤 Personal Profile
           </button>
+        </div>
+        <div className="field-hint" style={{ marginTop: "4px", fontSize: "0.75rem", color: "#64748b" }}>
+          {profile.userType === "person"
+            ? "Personal Profile: Your name will be prominent on the card with your designation & profession."
+            : "Business Profile: Your business name will be prominent on the card with owner name as secondary."}
         </div>
       </div>
 
@@ -305,56 +310,105 @@ export default function BusinessForm() {
             <input type="file" accept="image/*" onChange={(e) => handleImageUpload("banner", e)} />
             <div className="upload-area-icon">🖼️</div>
             <div className="upload-area-text">Upload Cover / Banner Image</div>
-            <div className="upload-area-sub">Recommended: 1200×400px</div>
+            <div className="upload-area-sub">Recommended: 1200×400px (PNG, JPG, WebP)</div>
           </div>
         )}
       </div>
 
-      {/* Business Name & Prefix */}
-      <div className="form-row-2">
-        <div className="form-field">
-          <label className="form-label">Business Name (business_name)</label>
-          <div className="input-with-prefix">
-            <select
-              className="prefix-select"
-              value={b.businessPrefix || "M/s."}
-              onChange={(e) => updateBusiness("businessPrefix", e.target.value)}
-            >
-              {BUSINESS_PREFIXES.map((bp) => (
-                <option key={bp} value={bp}>{bp || "None"}</option>
-              ))}
-            </select>
-            <input
-              className="form-input prefixed-input"
-              placeholder="e.g. JV Machine Tools And Robotics"
-              value={b.businessName || ""}
-              onChange={(e) => updateBusiness("businessName", e.target.value)}
-            />
+      {/* Name Inputs - Dynamically reordered based on Profile Type */}
+      {profile.userType === "person" ? (
+        <div className="form-row-2">
+          {/* Person Name & Prefix (Primary for Personal Profile) */}
+          <div className="form-field">
+            <label className="form-label">Full Name (person_name) <span style={{ color: "#4f46e5" }}>*</span></label>
+            <div className="input-with-prefix">
+              <select
+                className="prefix-select"
+                value={b.personPrefix || "Mr."}
+                onChange={(e) => updateBusiness("personPrefix", e.target.value)}
+              >
+                {PERSON_PREFIXES.map((pp) => (
+                  <option key={pp} value={pp}>{pp}</option>
+                ))}
+              </select>
+              <input
+                className="form-input prefixed-input"
+                placeholder="e.g. Ashok Kumar"
+                value={b.personName || ""}
+                onChange={(e) => updateBusiness("personName", e.target.value)}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Person Name & Prefix */}
-        <div className="form-field">
-          <label className="form-label">Person / Owner Name (person_name)</label>
-          <div className="input-with-prefix">
-            <select
-              className="prefix-select"
-              value={b.personPrefix || "Mr."}
-              onChange={(e) => updateBusiness("personPrefix", e.target.value)}
-            >
-              {PERSON_PREFIXES.map((pp) => (
-                <option key={pp} value={pp}>{pp}</option>
-              ))}
-            </select>
-            <input
-              className="form-input prefixed-input"
-              placeholder="e.g. Jaivishnu Selvaraj"
-              value={b.personName || ""}
-              onChange={(e) => updateBusiness("personName", e.target.value)}
-            />
+          {/* Business / Organization Name (Secondary for Personal Profile) */}
+          <div className="form-field">
+            <label className="form-label">Organization / Business Name <span>(optional)</span></label>
+            <div className="input-with-prefix">
+              <select
+                className="prefix-select"
+                value={b.businessPrefix || "M/s."}
+                onChange={(e) => updateBusiness("businessPrefix", e.target.value)}
+              >
+                {BUSINESS_PREFIXES.map((bp) => (
+                  <option key={bp} value={bp}>{bp || "None"}</option>
+                ))}
+              </select>
+              <input
+                className="form-input prefixed-input"
+                placeholder="e.g. Celfon Technologies"
+                value={b.businessName || ""}
+                onChange={(e) => updateBusiness("businessName", e.target.value)}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="form-row-2">
+          {/* Business Name & Prefix (Primary for Business Profile) */}
+          <div className="form-field">
+            <label className="form-label">Business Name (business_name) <span style={{ color: "#4f46e5" }}>*</span></label>
+            <div className="input-with-prefix">
+              <select
+                className="prefix-select"
+                value={b.businessPrefix || "M/s."}
+                onChange={(e) => updateBusiness("businessPrefix", e.target.value)}
+              >
+                {BUSINESS_PREFIXES.map((bp) => (
+                  <option key={bp} value={bp}>{bp || "None"}</option>
+                ))}
+              </select>
+              <input
+                className="form-input prefixed-input"
+                placeholder="e.g. JV Machine Tools And Robotics"
+                value={b.businessName || ""}
+                onChange={(e) => updateBusiness("businessName", e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Person Name & Prefix (Secondary for Business Profile) */}
+          <div className="form-field">
+            <label className="form-label">Owner / Contact Person (person_name)</label>
+            <div className="input-with-prefix">
+              <select
+                className="prefix-select"
+                value={b.personPrefix || "Mr."}
+                onChange={(e) => updateBusiness("personPrefix", e.target.value)}
+              >
+                {PERSON_PREFIXES.map((pp) => (
+                  <option key={pp} value={pp}>{pp}</option>
+                ))}
+              </select>
+              <input
+                className="form-input prefixed-input"
+                placeholder="e.g. Jaivishnu Selvaraj"
+                value={b.personName || ""}
+                onChange={(e) => updateBusiness("personName", e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Category / Activity & Keywords */}
       <div className="form-row-2">

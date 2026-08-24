@@ -82,12 +82,6 @@ export default function PublicProfilePage() {
         <CardContent profile={profile} />
         <BottomNav profile={profile} />
       </div>
-
-      <footer className="public-platform-footer">
-        <Link to="/create" className="public-platform-badge">
-          <span>⚡ Create your own Digital Card on CELFON</span>
-        </Link>
-      </footer>
     </div>
   )
 }

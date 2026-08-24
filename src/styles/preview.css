@@ -1,0 +1,1163 @@
+/* ==========================================================================
+   DIGITAL VISITING CARD - PHONE PREVIEW & PUBLIC THEME (LIGHT MODE)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Phone Mockup Wrapper & Frame (Creator View)
+   -------------------------------------------------------------------------- */
+.phone-mockup-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  width: 100%;
+}
+
+.phone-device-frame {
+  width: 375px;
+  height: 720px;
+  max-height: 82vh;
+  background: #ffffff;
+  border-radius: 40px;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.2), 0 0 0 10px #0f172a, 0 0 0 12px #e2e8f0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.phone-speaker-notch {
+  width: 120px;
+  height: 18px;
+  background: #0f172a;
+  border-radius: 0 0 14px 14px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+}
+
+.phone-scroll-screen {
+  flex: 1;
+  overflow-y: auto;
+  background: #ffffff;
+  padding-top: 18px;
+  padding-bottom: 60px;
+  scroll-behavior: smooth;
+}
+
+.phone-scroll-screen::-webkit-scrollbar {
+  width: 4px;
+}
+.phone-scroll-screen::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.phone-home-indicator {
+  width: 110px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 999px;
+  margin: 6px auto;
+  flex-shrink: 0;
+}
+
+/* In phone frame, bottom nav is pinned inside mockup */
+.phone-device-frame .card-bottom-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: none;
+  max-width: 100%;
+  border-radius: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Card Screen Core (Light Theme)
+   -------------------------------------------------------------------------- */
+.card-screen.light-theme-card {
+  background: #ffffff;
+  color: #0f172a;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  padding-bottom: 75px;
+}
+
+/* --------------------------------------------------------------------------
+   1. Card Hero & Profile Header
+   -------------------------------------------------------------------------- */
+.card-hero-container {
+  position: relative;
+  background: #ffffff;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.card-hero-banner {
+  height: 140px;
+  background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0.75rem 1rem;
+  transition: background 0.3s ease;
+}
+
+.card-live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.card-header-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: -50px;
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 10;
+}
+
+.card-logo-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 4px solid #ffffff;
+  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.card-logo-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-initials-text {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #0284c7;
+  background: #f0f9ff;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-biz-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.card-owner-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 0.2rem;
+}
+
+.card-designation {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 0.1rem;
+}
+
+.card-address-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.75rem 1.25rem 0.25rem;
+  padding: 0.45rem 0.85rem;
+  background: #f8fafc;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.card-addr-icon {
+  font-size: 0.85rem;
+}
+
+.card-addr-text {
+  font-size: 0.76rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* Quick Actions Row */
+.card-quick-actions-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  padding: 1rem 1.25rem 0.5rem;
+}
+
+.card-quick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.7rem 0.35rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #0f172a;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-quick-btn:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.quick-btn-icon {
+  font-size: 1.25rem;
+}
+
+.quick-btn-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Primary Action Buttons */
+.card-primary-actions {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 0.65rem;
+  padding: 0.65rem 1.25rem 0;
+}
+
+.btn-card-save {
+  padding: 0.7rem;
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-card-save:hover {
+  background: #0369a1;
+  transform: translateY(-1px);
+}
+
+.btn-card-share {
+  padding: 0.7rem;
+  background: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-card-share:hover {
+  background: #e2e8f0;
+}
+
+/* --------------------------------------------------------------------------
+   2. Products Section
+   -------------------------------------------------------------------------- */
+.card-section {
+  padding: 1.35rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.card-section-head {
+  margin-bottom: 0.95rem;
+}
+
+.card-section-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0284c7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.card-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 0.15rem;
+}
+
+.card-products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.card-product-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.card-prod-img-wrap {
+  width: 100%;
+  height: 145px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.card-prod-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-prod-body {
+  padding: 0.95rem 1.1rem;
+}
+
+.card-prod-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.card-prod-name {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.card-prod-price {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #166534;
+  background: #f0fdf4;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #bbf7d0;
+}
+
+.card-prod-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0.35rem 0 0.75rem;
+  line-height: 1.45;
+}
+
+.card-prod-enquire-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.55rem;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.card-prod-enquire-btn:hover {
+  background: #dcfce7;
+}
+
+.card-products-placeholder {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 0.82rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. Celfon Promotional Card
+   -------------------------------------------------------------------------- */
+.card-celfon-promo-section {
+  background: #fafafa;
+}
+
+.card-celfon-box {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 15px rgba(22, 101, 52, 0.06);
+}
+
+.celfon-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.celfon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #166534;
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.celfon-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #86efac;
+}
+
+.celfon-sponsor-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #15803d;
+  letter-spacing: 0.05em;
+}
+
+.celfon-box-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.95rem;
+}
+
+.celfon-icon {
+  font-size: 1.5rem;
+  background: #ffffff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bbf7d0;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.celfon-main-headline {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #14532d;
+}
+
+.celfon-sub-headline {
+  font-size: 0.76rem;
+  color: #166534;
+  margin-top: 0.15rem;
+  line-height: 1.4;
+}
+
+.celfon-perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.95rem;
+}
+
+.celfon-perk {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: #14532d;
+  font-weight: 600;
+}
+
+.perk-icon {
+  color: #15803d;
+  font-weight: 900;
+}
+
+.btn-celfon-visit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.65rem;
+  background: #166534;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-celfon-visit:hover {
+  background: #14532d;
+}
+
+/* --------------------------------------------------------------------------
+   4. EV Scooter Referral Card
+   -------------------------------------------------------------------------- */
+.card-ev-promo-section {
+  background: #ffffff;
+}
+
+.card-ev-banner {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  margin-bottom: 0.95rem;
+}
+
+.ev-badge-pill-card {
+  display: inline-block;
+  background: #b45309;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 0.4rem;
+}
+
+.ev-card-title {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #78350f;
+}
+
+.ev-card-subtitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-top: 0.15rem;
+}
+
+.ev-card-highlight {
+  background: #ffffff;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #451a03;
+  line-height: 1.55;
+}
+
+.ev-sparkle-text {
+  color: #b45309;
+  font-weight: 700;
+}
+
+.ev-card-prize-box {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  padding: 0.95rem;
+  margin-bottom: 0.95rem;
+}
+
+.ev-prize-scooter-icon {
+  font-size: 2rem;
+}
+
+.prize-badge-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #ea580c;
+  text-transform: uppercase;
+}
+
+.prize-title-text {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.prize-desc-text {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.ev-card-steps-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.95rem;
+}
+
+.ev-card-step {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.75rem 0.4rem;
+  text-align: center;
+}
+
+.step-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.35rem;
+}
+
+.step-txt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.btn-ev-card-refer {
+  width: 100%;
+  padding: 0.7rem;
+  background: #d97706;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ev-card-refer:hover {
+  background: #b45309;
+}
+
+/* Card Footer */
+.card-preview-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: #f8fafc;
+}
+
+.card-footer-branding {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   STICKY / FIXED BOTTOM NAVIGATION BAR
+   -------------------------------------------------------------------------- */
+.card-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid #e2e8f0;
+  padding: 0.45rem 0.25rem;
+  box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.08);
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 440px;
+  z-index: 999;
+  border-radius: 18px 18px 0 0;
+}
+
+.nav-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem 0.5rem;
+  border-radius: 10px;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.nav-tab-btn:hover {
+  color: #0284c7;
+  background: #f1f5f9;
+}
+
+.nav-tab-btn.active {
+  color: #0284c7;
+}
+
+.nav-tab-btn.active .nav-tab-label {
+  font-weight: 800;
+  color: #0284c7;
+}
+
+.nav-tab-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.nav-tab-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.nav-tab-contact {
+  color: #10b981;
+}
+
+.nav-tab-contact:hover {
+  color: #059669;
+  background: #ecfdf5;
+}
+
+/* --------------------------------------------------------------------------
+   PUBLIC PROFILE PAGE WRAPPER & MESH / TEXTURE BACKGROUNDS
+   -------------------------------------------------------------------------- */
+.public-profile-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5rem 1rem 5.5rem;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+/* Base public card container with floating glass depth */
+.public-card-container {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  position: relative;
+}
+
+.public-platform-footer {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.public-platform-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.15rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.public-platform-badge:hover {
+  background: #ffffff;
+  border-color: #0284c7;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   6 DISTINCT PATTERN BACKGROUNDS & TEMPLATE STYLES
+   -------------------------------------------------------------------------- */
+
+/* 1. Template: Ocean Breeze & Cyan (Micro-Dot Matrix Pattern) */
+.bg-tpl-cyan-ocean {
+  background-color: #f0f9ff;
+  background-image: 
+    radial-gradient(circle, #0284c7 1.3px, transparent 1.3px),
+    radial-gradient(circle, #38bdf8 1px, transparent 1px),
+    linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #e0f2fe 100%);
+  background-size: 20px 20px, 40px 40px, 100% 100%;
+  background-position: 0 0, 10px 10px, 0 0;
+}
+
+.tpl-cyan-ocean .card-hero-banner {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 40%),
+    linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+}
+.tpl-cyan-ocean .logo-initials-text {
+  color: #0284c7;
+  background: #f0f9ff;
+}
+.tpl-cyan-ocean .btn-card-save {
+  background: #0284c7;
+}
+.tpl-cyan-ocean .card-section-badge {
+  color: #0284c7;
+}
+.tpl-cyan-ocean .card-quick-btn:hover {
+  border-color: #7dd3fc;
+  background: #f0f9ff;
+}
+
+/* 2. Template: Royal Obsidian & Gold (Luxury Repeating Carbon Stripes & Gold Flecks) */
+.bg-tpl-gold-luxury {
+  background-color: #0b0f19;
+  background-image: 
+    repeating-linear-gradient(135deg, rgba(245, 158, 11, 0.09) 0px, rgba(245, 158, 11, 0.09) 2px, transparent 2px, transparent 14px),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 10%, rgba(217, 119, 6, 0.25) 0%, transparent 60%);
+  background-size: auto, auto, 100% 100%;
+}
+
+.tpl-gold-luxury .card-hero-banner {
+  background: 
+    repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.08) 0px, rgba(245, 158, 11, 0.08) 3px, transparent 3px, transparent 12px),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  border-bottom: 3px solid #f59e0b;
+}
+.tpl-gold-luxury .card-logo-avatar {
+  border: 4px solid #fef3c7;
+  box-shadow: 0 12px 28px -5px rgba(217, 119, 6, 0.35);
+}
+.tpl-gold-luxury .logo-initials-text {
+  color: #d97706;
+  background: #fffbeb;
+}
+.tpl-gold-luxury .btn-card-save {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+}
+.tpl-gold-luxury .card-section-badge {
+  color: #b45309;
+}
+.tpl-gold-luxury .profile-cat-pill {
+  background: #fef3c7;
+  color: #92400e;
+}
+.tpl-gold-luxury .card-quick-btn:hover {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+/* 3. Template: Mint Emerald & Fresh (Botanical Isometric Cross-Hatch Pattern) */
+.bg-tpl-emerald-mesh {
+  background-color: #ecfdf5;
+  background-image: 
+    linear-gradient(30deg, #10b98118 12%, transparent 12.5%, transparent 87%, #10b98118 87.5%, #10b98118),
+    linear-gradient(150deg, #10b98118 12%, transparent 12.5%, transparent 87%, #10b98118 87.5%, #10b98118),
+    linear-gradient(30deg, #10b98118 12%, transparent 12.5%, transparent 87%, #10b98118 87.5%, #10b98118),
+    linear-gradient(150deg, #10b98118 12%, transparent 12.5%, transparent 87%, #10b98118 87.5%, #10b98118),
+    linear-gradient(60deg, #05966925 25%, transparent 25.5%, transparent 75%, #05966925 75%, #05966925),
+    linear-gradient(60deg, #05966925 25%, transparent 25.5%, transparent 75%, #05966925 75%, #05966925);
+  background-size: 40px 70px;
+  background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+}
+
+.tpl-emerald-mesh .card-hero-banner {
+  background: 
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 40%),
+    linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+}
+.tpl-emerald-mesh .logo-initials-text {
+  color: #059669;
+  background: #ecfdf5;
+}
+.tpl-emerald-mesh .btn-card-save {
+  background: #059669;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+.tpl-emerald-mesh .card-section-badge {
+  color: #059669;
+}
+.tpl-emerald-mesh .card-quick-btn:hover {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+}
+
+/* 4. Template: Rose Gold & Magenta (Concentric Polka Rings & Chevron Wave) */
+.bg-tpl-pink-angled {
+  background-color: #fdf2f8;
+  background-image: 
+    radial-gradient(#db2777 15%, #fdf2f8 16% 32%, transparent 33.5%),
+    radial-gradient(#db2777 15%, #fdf2f8 16% 32%, transparent 33.5%),
+    radial-gradient(#fdf2f8 32%, #db2777 34% 65%, transparent 67%),
+    repeating-linear-gradient(45deg, #f472b6 -12.5% 12.5%, #fdf2f8 0 37.5%);
+  background-position: -20px -20px, 20px 20px, 0 0, 0 0;
+  background-size: 70px 70px, 70px 70px, 35px 35px, 70px 70px;
+}
+
+.tpl-pink-angled .card-hero-banner {
+  background: linear-gradient(135deg, #db2777 0%, #f43f5e 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+}
+.tpl-pink-angled .logo-initials-text {
+  color: #db2777;
+  background: #fdf2f8;
+}
+.tpl-pink-angled .btn-card-save {
+  background: #db2777;
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
+}
+.tpl-pink-angled .card-section-badge {
+  color: #db2777;
+}
+.tpl-pink-angled .card-quick-btn:hover {
+  border-color: #fbcfe8;
+  background: #fdf2f8;
+}
+
+/* 5. Template: Neo Violet & Indigo (3D Cyber Grid & Isometric Cube Texture) */
+.bg-tpl-purple-indigo {
+  background-color: #1e1b4b;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.25) 1px, transparent 1px),
+    repeating-linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0px, rgba(124, 58, 237, 0.15) 15px, transparent 15px, transparent 30px),
+    radial-gradient(circle at 50% 30%, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
+  background-size: 32px 32px, 32px 32px, 64px 64px, 100% 100%;
+}
+
+.tpl-purple-indigo .card-hero-banner {
+  background: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+  background-size: 20px 20px, 20px 20px, 100% 100%;
+}
+.tpl-purple-indigo .logo-initials-text {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+.tpl-purple-indigo .btn-card-save {
+  background: #4f46e5;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+.tpl-purple-indigo .card-section-badge {
+  color: #4f46e5;
+}
+.tpl-purple-indigo .card-quick-btn:hover {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+/* 6. Template: Sunset Coral & Amber (Warm Ambient Rain Particles / Golden Drops) */
+.bg-tpl-sunset-amber {
+  background-color: #fff7ed;
+  background-image: 
+    radial-gradient(3px 80px at 20px 50px, #ea580c55, transparent),
+    radial-gradient(3px 80px at 140px 90px, #f59e0b55, transparent),
+    radial-gradient(3px 80px at 260px 40px, #f9731655, transparent),
+    radial-gradient(2px 2px at 60px 30px, #ea580c 100%, transparent),
+    radial-gradient(2px 2px at 180px 100px, #f59e0b 100%, transparent),
+    radial-gradient(2px 2px at 290px 60px, #f97316 100%, transparent),
+    linear-gradient(135deg, #ffedd5 0%, #fff7ed 50%, #fef3c7 100%);
+  background-size: 320px 160px, 320px 160px, 320px 160px, 160px 80px, 160px 80px, 160px 80px, 100% 100%;
+}
+
+.tpl-sunset-amber .card-hero-banner {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 40%),
+    linear-gradient(135deg, #f97316 0%, #fb923c 50%, #f59e0b 100%);
+}
+.tpl-sunset-amber .logo-initials-text {
+  color: #ea580c;
+  background: #fff7ed;
+}
+.tpl-sunset-amber .btn-card-save {
+  background: #ea580c;
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+}
+.tpl-sunset-amber .card-section-badge {
+  color: #ea580c;
+}
+.tpl-sunset-amber .card-quick-btn:hover {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+/* --------------------------------------------------------------------------
+   Desktop & Full Page Mockups
+   -------------------------------------------------------------------------- */
+.browser-mockup {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.browser-dots {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.browser-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.browser-dot.red { background: #ef4444; }
+.browser-dot.yellow { background: #f59e0b; }
+.browser-dot.green { background: #10b981; }
+
+.browser-url {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.browser-content {
+  max-height: 75vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.browser-mockup .card-bottom-nav {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  border-radius: 0;
+}
+
+/* Loading & 404 States */
+.loading-wrap,
+.notfound-wrap {
+  justify-content: center;
+}
+
+.profile-loading-card,
+.notfound-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 420px;
+  width: 100%;
+}
+
+.profile-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #0284c7;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 0.8s linear infinite;
+}
+
+.profile-loading-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.notfound-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.notfound-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.notfound-desc {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0.5rem 0 1.5rem;
+  line-height: 1.5;
+}
+
+.notfound-slug {
+  color: #0284c7;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
